@@ -116,8 +116,8 @@ public class ParallelTemperingTuner {
             String id = "MS-" + (s+1);
             analysis.addSearch(id, problem -> {
                 TSPData data = (TSPData) ((GenericProblem) problem).getData();
-                double avgDist = computeAverageTravelDistance(data);
-                double scaledTemp = temp * avgDist;
+                double avgNNDist = computeAvgNearestNeighbourDistance(data);
+                double scaledTemp = temp * avgNNDist;
                 Search<TSPSolution> ms = new MetropolisSearch<>(problem, new TSP2OptNeighbourhood(), scaledTemp);
                 ms.addStopCriterion(stopCrit);
                 return ms;
@@ -180,17 +180,23 @@ public class ParallelTemperingTuner {
         System.out.print("\r");
     }
     
-    // compute average travel distance for symmetric distance matrix
-    private static double computeAverageTravelDistance(TSPData data){
+    // compute average distance from city to nearest other city
+    private static double computeAvgNearestNeighbourDistance(TSPData data){
         int n = data.getNumCities();
         double sum = 0.0;
         for(int i=0; i<n; i++){
-            for(int j=i+1; j<n; j++) {
-                sum += data.getDistance(i, j);
+            double min = Double.MAX_VALUE;
+            for(int j=0; j<n; j++) {
+                if(j != i){
+                    double dist = data.getDistance(i, j);
+                    if(dist < min){
+                        min = dist;
+                    }
+                }
             }
+            sum += min;
         }
-        int numDistances = n*(n-1)/2;
-        return sum/numDistances;
+        return sum/n;
     }
     
 }
