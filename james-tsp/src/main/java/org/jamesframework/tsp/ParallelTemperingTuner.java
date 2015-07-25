@@ -21,11 +21,9 @@ import java.util.concurrent.TimeUnit;
 import mjson.Json;
 import org.jamesframework.core.problems.GenericProblem;
 import org.jamesframework.core.search.Search;
-import org.jamesframework.core.search.algo.MetropolisSearch;
 import org.jamesframework.core.search.stopcriteria.MaxRuntime;
 import org.jamesframework.core.search.stopcriteria.StopCriterion;
 import org.jamesframework.examples.tsp.TSP;
-import org.jamesframework.examples.tsp.TSP2OptNeighbourhood;
 import org.jamesframework.examples.tsp.TSPData;
 import org.jamesframework.examples.tsp.TSPFileReader;
 import org.jamesframework.examples.tsp.TSPObjective;
@@ -115,10 +113,7 @@ public class ParallelTemperingTuner {
             System.out.format("Add Metropolis search (temp: %s)\n", df.format(temp));
             String id = "MS-" + (s+1);
             analysis.addSearch(id, problem -> {
-                TSPData data = (TSPData) ((GenericProblem) problem).getData();
-                double avgNNDist = computeAvgNearestNeighbourDistance(data);
-                double scaledTemp = temp * avgNNDist;
-                Search<TSPSolution> ms = new MetropolisSearch<>(problem, new TSP2OptNeighbourhood(), scaledTemp);
+                Search<TSPSolution> ms = API.getAPI().getMetropolis(problem, temp);
                 ms.addStopCriterion(stopCrit);
                 return ms;
             });
@@ -178,25 +173,6 @@ public class ParallelTemperingTuner {
             System.out.print(c);
         }
         System.out.print("\r");
-    }
-    
-    // compute average distance from city to nearest other city
-    private static double computeAvgNearestNeighbourDistance(TSPData data){
-        int n = data.getNumCities();
-        double sum = 0.0;
-        for(int i=0; i<n; i++){
-            double min = Double.MAX_VALUE;
-            for(int j=0; j<n; j++) {
-                if(j != i){
-                    double dist = data.getDistance(i, j);
-                    if(dist < min){
-                        min = dist;
-                    }
-                }
-            }
-            sum += min;
-        }
-        return sum/n;
     }
     
 }

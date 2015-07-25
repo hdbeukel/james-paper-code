@@ -15,6 +15,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println("Run one of the following commands:");
         System.out.println("java -cp james-tsp.jar org.jamesframework.tsp.ParallelTemperingTuner <args>");
+        System.out.println("java -cp james-tsp.jar org.jamesframework.tsp.Solver <args>");
     }
     
 }
