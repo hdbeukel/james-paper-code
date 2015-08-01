@@ -50,17 +50,16 @@ public class API {
     }
     
     // compute average distance from city to nearest other city
+    // (only non-identical neighbours, i.e. with distance > 0, are considered)
     private double computeAvgNearestNeighbourDistance(TSPData data){
         int n = data.getNumCities();
         double sum = 0.0;
         for(int i=0; i<n; i++){
             double min = Double.MAX_VALUE;
             for(int j=0; j<n; j++) {
-                if(j != i){
-                    double dist = data.getDistance(i, j);
-                    if(dist < min){
-                        min = dist;
-                    }
+                double dist = data.getDistance(i, j);
+                if(dist > 0.0 && dist < min){
+                    min = dist;
                 }
             }
             sum += min;
