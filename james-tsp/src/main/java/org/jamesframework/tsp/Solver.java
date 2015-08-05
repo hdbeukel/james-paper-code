@@ -75,7 +75,7 @@ public class Solver {
 
                 // create parallel tempering
                 double minTemp = 1e-8;
-                double maxTemp = 1.0;
+                double maxTemp = 0.6;
                 int numReplicas = 10;
                 Search<TSPSolution> pt = API.getAPI().getParallelTempering(problem, minTemp, maxTemp, numReplicas);
                 pt.addStopCriterion(sc);
