@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.jamesframework.james.asc;
 
 import java.util.HashSet;
@@ -24,6 +20,10 @@ public class CoreSubsetData implements IntegerIdentifiedData {
 
     public double getDistance(int id1, int id2) {
         return dist[id1][id2];
+    }
+    
+    public double[][] getDistanceMatrix() {
+        return dist;
     }
 
     @Override

@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package org.jamesframework.james.asc;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 import org.jamesframework.core.search.algo.RandomDescent;
 import org.jamesframework.core.search.neigh.Neighbourhood;
@@ -22,6 +16,7 @@ public class SampleCore {
      * 0: file
      * 1: size
      * 2: runtime (sec)
+     * 3: enable delta evaluation (boolean)
      */
     public static void main(String[] args) throws FileNotFoundException {
 
@@ -29,12 +24,15 @@ public class SampleCore {
         
         // initialize data
         CoreSubsetData data = FileReader.read(file);
+        
         // create objective
-        CoreSubsetObjective obj = new CoreSubsetObjective();
+        boolean delta = Boolean.parseBoolean(args[3]);
+        CoreSubsetObjective obj = delta ? new CoreSubsetObjectiveWithDelta() : new CoreSubsetObjective();
+        
         // specify desired subset size
         int size = Integer.parseInt(args[1]);
         // finalize problem
-        SubsetProblem<CoreSubsetData> problem = new SubsetProblem<>(obj, data, size);
+        SubsetProblem<CoreSubsetData> problem = new SubsetProblem<>(data, obj, size);
 
         // create search
         Neighbourhood<SubsetSolution> neigh = new SingleSwapNeighbourhood();
@@ -46,6 +44,7 @@ public class SampleCore {
         search.start();
         System.out.println("Best solution: " + search.getBestSolution().getSelectedIDs());
         System.out.println("Best score: " + search.getBestSolutionEvaluation());
+        System.out.println("Performed steps: " + search.getSteps());
         search.dispose();
 
     }
