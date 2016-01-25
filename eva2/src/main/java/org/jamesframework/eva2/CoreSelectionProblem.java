@@ -48,7 +48,7 @@ public class CoreSelectionProblem extends AbstractProblemBinary {
         }
         
         // maximize average distance
-        return new double[] {-sumDist/numDist};
+        return new double[]{-sumDist / numDist};
         
     }
 
@@ -70,7 +70,7 @@ public class CoreSelectionProblem extends AbstractProblemBinary {
         super.initializePopulation(population);
         
         // modify solutions to match desired core size
-        for(AbstractEAIndividual ind : population){
+        for (AbstractEAIndividual ind : population) {
             InterfaceDataTypeBinary indBinary = (InterfaceDataTypeBinary) ind;
             BitSet b = indBinary.getBinaryData();
             // generate random subset of indices to set

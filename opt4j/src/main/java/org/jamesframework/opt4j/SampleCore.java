@@ -32,9 +32,6 @@ public class SampleCore {
         
         // create and configure problem
         CoreModule cm = new CoreModule();
-        cm.setDist(dist);
-        cm.setN(dist.length);
-        cm.setCoreSize(coreSize);
         
         // run search
         ViewerModule viewer = new ViewerModule();
