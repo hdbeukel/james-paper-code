@@ -2,17 +2,17 @@
 
 package org.jamesframework.jmetal;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.jamesframework.core.util.SetUtilities;
-import org.uma.jmetal.problem.impl.AbstractBinaryProblem;
-import org.uma.jmetal.solution.BinarySolution;
-import org.uma.jmetal.solution.impl.DefaultBinarySolution;
+import org.uma.jmetal.problem.impl.AbstractGenericProblem;
 
 
-public class CoreSelectionProblem extends AbstractBinaryProblem {
+public class CoreSelectionProblem extends AbstractGenericProblem<CoreSolution> {
 
     private static final Random RG = new Random();
     
@@ -27,37 +27,37 @@ public class CoreSelectionProblem extends AbstractBinaryProblem {
         this.n = dist.length;
         this.s = coreSize;
         
-        setNumberOfVariables(n);
+        setNumberOfVariables(s);
         setNumberOfObjectives(1);
         
         ids = IntStream.range(0, n).boxed().collect(Collectors.toSet());
         
     }
     
-    @Override
-    protected int getBitsPerVariable(int i) {
-        return 1;
+    public int getCoreSize() {
+        return s;
+    }
+    
+    public int getDatasetSize() {
+        return n;
+    }
+    
+    public Set<Integer> getIDs() {
+        return ids;
     }
 
     @Override
-    public void evaluate(BinarySolution sol) {
-
-        // create array of selected item IDs
-        int[] sel = new int[s];
-        int k = 0;
-        for (int i = 0; i < n; i++) {
-            if (sol.getVariableValue(i).get(0)) {
-                sel[k] = i;
-                k++;
-            }
-        }
+    public void evaluate(CoreSolution sol) {
         
         // compute average pairwise distance
         int numDist = s * (s - 1) / 2;
         double sumDist = 0.0;
+        int id1, id2;
         for (int i = 0; i < s; i++) {
             for (int j = i + 1; j < s; j++) {
-                sumDist += dist[sel[i]][sel[j]];
+                id1 = sol.getVariableValue(i);
+                id2 = sol.getVariableValue(j);
+                sumDist += dist[id1][id2];
             }
         }
         
@@ -67,20 +67,18 @@ public class CoreSelectionProblem extends AbstractBinaryProblem {
     }
 
     @Override
-    public BinarySolution createSolution() {
+    public CoreSolution createSolution() {
         
         // random subset of IDs to select
-        Set<Integer> sel = SetUtilities.getRandomSubset(ids, s, RG);
+        List<Integer> sel = new ArrayList<>();
+        SetUtilities.getRandomSubset(ids, s, RG, sel);
+        
+        // unselected IDs
+        List<Integer> unsel = new ArrayList<>(ids);
+        unsel.removeAll(sel);
         
         // create solution
-        BinarySolution sol = new DefaultBinarySolution(this);
-        for (int i = 0; i < n; i++) {
-            if (sel.contains(i)) {
-                sol.getVariableValue(i).set(0);
-            } else {
-                sol.getVariableValue(i).clear(0);
-            }
-        }
+        CoreSolution sol = new CoreSolution(this, sel, unsel);
         
         return sol;
         
