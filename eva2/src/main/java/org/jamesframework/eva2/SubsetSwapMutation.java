@@ -54,7 +54,7 @@ public class SubsetSwapMutation implements InterfaceMutation {
     }
     
     @Override
-    public Object clone(){
+    public Object clone() {
         return new SubsetSwapMutation(n);
     }
 
