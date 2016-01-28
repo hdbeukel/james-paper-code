@@ -18,13 +18,13 @@ public class SubsetSwapMutation implements MutationOperator<CoreSolution> {
         // swap one selected and unselected item
         
         int delI = RG.nextInt(s);
-        int addI = RG.nextInt(sol.getUnselectedIDs().size());
+        int addI = RG.nextInt(sol.getUnselectedIDs().length);
         
         int del = sol.getVariableValue(delI);
-        int add = sol.getUnselectedIDs().get(addI);
+        int add = sol.getUnselectedIDs()[addI];
         
         sol.setVariableValue(delI, add);
-        sol.getUnselectedIDs().set(addI, del);
+        sol.getUnselectedIDs()[addI] = del;
         
         return sol;
         

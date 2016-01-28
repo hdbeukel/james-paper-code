@@ -3,6 +3,7 @@
 package org.jamesframework.jmetal;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -74,11 +75,16 @@ public class CoreSelectionProblem extends AbstractGenericProblem<CoreSolution> {
         SetUtilities.getRandomSubset(ids, s, RG, sel);
         
         // unselected IDs
-        List<Integer> unsel = new ArrayList<>(ids);
+        Set<Integer> unsel = new HashSet<>(ids);
         unsel.removeAll(sel);
+        int[] unselA = new int[unsel.size()];
+        int i = 0;
+        for (int id : unsel) {
+            unselA[i++] = id;
+        }
         
         // create solution
-        CoreSolution sol = new CoreSolution(this, sel, unsel);
+        CoreSolution sol = new CoreSolution(this, sel, unselA);
         
         return sol;
         
