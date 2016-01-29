@@ -20,7 +20,10 @@ import org.jamesframework.ext.analysis.JsonConverter;
 public class CompareAlgo {
 
     /**
-     * 0: selection ratio 1: runs 2: runtime (sec) 3 - n: files
+     * 0: selection ratio
+     * 1: runs
+     * 2: runtime (sec)
+     * 3 - n: files
      */
     public static void main(String[] args) throws IOException {
 
