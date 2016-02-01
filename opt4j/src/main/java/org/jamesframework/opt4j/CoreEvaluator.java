@@ -4,18 +4,13 @@ package org.jamesframework.opt4j;
 import org.opt4j.core.Objective.Sign;
 import org.opt4j.core.Objectives;
 import org.opt4j.core.problem.Evaluator;
-import org.opt4j.core.start.Constant;
 
-public class CoreEvaluator implements Evaluator<CoreSubset> {
+public class CoreEvaluator implements Evaluator<CoreSolution> {
 
-    private final double[][] dist;
-
-    public CoreEvaluator(@Constant(value = "dist") double[][] dist) {
-        this.dist = dist;
-    }
+    public static double[][] dist;
     
     @Override
-    public Objectives evaluate(CoreSubset core) {
+    public Objectives evaluate(CoreSolution core) {
         
         int n = core.size();
         int numDist = n * (n - 1) / 2;
