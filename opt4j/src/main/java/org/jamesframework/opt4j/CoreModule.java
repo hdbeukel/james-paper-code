@@ -10,7 +10,6 @@ public class CoreModule extends ProblemModule {
     @Override
     protected void config() {
         bindProblem(CoreCreator.class, CoreDecoder.class, CoreEvaluator.class);
-        
     }
 
 }

@@ -36,5 +36,7 @@ public class HillClimberModule extends OptimizerModule {
     @Override
     public void config() {
         bindIterativeOptimizer(HillClimber.class);
+        //bind(Neighbor.class).to(CoreNeighbor.class);
     }
+    
 }

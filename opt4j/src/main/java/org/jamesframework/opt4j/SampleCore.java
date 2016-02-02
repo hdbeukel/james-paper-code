@@ -28,13 +28,13 @@ public class SampleCore {
         // create search
         HillClimberModule hc = new HillClimberModule();
         hc.setIterations(steps);
-        
+                
         // create and configure problem
         CoreCreator.n = n;
         CoreCreator.coreSize = coreSize;
         CoreEvaluator.dist = dist;
         CoreModule cm = new CoreModule();
-        
+                   
         // run search
         ViewerModule viewer = new ViewerModule();
         viewer.setCloseOnStop(true);

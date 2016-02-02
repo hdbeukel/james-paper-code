@@ -14,6 +14,8 @@ public class CoreNeighbor implements Neighbor<BooleanGenotype> {
     @Override
     public void neighbor(BooleanGenotype genotype) {
         
+        System.out.println("HELLO");
+        
         // swap a selected (true) and unselected (false) item
         List<Integer> sel = new ArrayList<>();
         List<Integer> unsel = new ArrayList<>();

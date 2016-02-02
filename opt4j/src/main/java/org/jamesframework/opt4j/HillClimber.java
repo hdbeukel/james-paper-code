@@ -70,7 +70,7 @@ public class HillClimber implements IterativeOptimizer {
 
     @Override
     public void next() throws TerminationException {
-
+        
         if (population.isEmpty()) {
             // the first iteration
 
