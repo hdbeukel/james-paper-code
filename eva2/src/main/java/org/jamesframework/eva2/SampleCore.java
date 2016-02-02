@@ -38,17 +38,17 @@ public class SampleCore {
         hc.setMutationOperator(new SubsetSwapMutation(n));
 
         // run search
-        long start = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
         BitSet sol = OptimizerFactory.optimizeToBinary(optParams, "eva2.out");
-        long stop = System.currentTimeMillis();
-        long time = stop - start;
+        long stopTime = System.currentTimeMillis();
+        long time = stopTime - startTime;
         
         // output results
         Set<Integer> selectedIds = sol.stream().boxed().collect(Collectors.toSet());
         System.out.println("Best solution: " + selectedIds);
         System.out.println("Best score: " + -problem.evaluate(sol)[0]);
         System.out.println("Performed evaluations: " + OptimizerFactory.lastEvalsPerformed());
-        System.out.println("Runtime: " + time);
+        System.out.println("Runtime (ms): " + time);
 
     }
 

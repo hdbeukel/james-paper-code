@@ -80,7 +80,7 @@ public class SampleCore {
         System.out.println("Best solution: " + search.getBestSolution());
         System.out.println("Best score: " + search.getBestSolutionEvaluation());
         System.out.println("Performed steps: " + search.getSteps());
-        System.out.println("Runtime: " + search.getRuntime());
+        System.out.println("Runtime (ms): " + search.getRuntime());
         search.dispose();
         
     }

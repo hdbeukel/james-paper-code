@@ -90,7 +90,7 @@ public class SampleCore {
         }
         System.out.println("Best solution: " + selectedIds);
         System.out.println("Best score: " + -sol.getObjective(0));
-        System.out.println("Execution time (ms): " + time);
+        System.out.println("runtime (ms): " + time);
 
     }
 

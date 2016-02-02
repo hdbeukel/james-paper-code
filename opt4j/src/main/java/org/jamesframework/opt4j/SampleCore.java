@@ -41,11 +41,12 @@ public class SampleCore {
         Opt4JTask task = new Opt4JTask(false);
         task.init(hc, cm, viewer);
         try {
-            
-            long start = System.currentTimeMillis();
+                        
+            long startTime = System.currentTimeMillis();
             task.execute();
-            long stop = System.currentTimeMillis();
-            long time = stop - start;
+            long stopTime = System.currentTimeMillis();
+            
+            long time = stopTime - startTime;
             
             Archive archive = task.getInstance(Archive.class);
             Individual solInd = archive.iterator().next();
@@ -53,7 +54,7 @@ public class SampleCore {
             
             System.out.println("Best solution: " + sol);
             System.out.println("Best score: " + -solInd.getObjectives().array()[0]);
-            System.out.println("Execution time (ms): " + time);
+            System.out.println("Runtime (ms): " + time);
             
         } catch (Exception e) {
             e.printStackTrace();
