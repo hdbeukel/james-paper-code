@@ -1,7 +1,6 @@
 
 package org.jamesframework.james.asc;
 
-import java.io.FileNotFoundException;
 import org.jamesframework.core.search.Search;
 import org.jamesframework.core.search.algo.RandomDescent;
 import org.jamesframework.core.search.neigh.Neighbourhood;
@@ -24,8 +23,15 @@ public class SampleCore {
      * 3: enable delta evaluation (boolean)
      * 4: use optimized encoding (boolean)
      */
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
 
+        run(args);
+        System.gc();
+        
+    }
+    
+    private static void run(String[] args) {
+        
         // parse arguments
         String file = args[0];
         int size = Integer.parseInt(args[1]);

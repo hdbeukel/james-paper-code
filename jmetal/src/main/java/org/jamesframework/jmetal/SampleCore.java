@@ -25,6 +25,13 @@ public class SampleCore {
      */
     public static void main(String[] args) {
 
+        run(args);
+        System.gc();
+
+    }
+    
+    private static void run(String[] args){
+        
         // parse arguments
         String file = args[0];
         int coreSize = Integer.parseInt(args[1]);
@@ -91,7 +98,7 @@ public class SampleCore {
         System.out.println("Best solution: " + selectedIds);
         System.out.println("Best score: " + -sol.getObjective(0));
         System.out.println("runtime (ms): " + time);
-
+        
     }
 
 }
