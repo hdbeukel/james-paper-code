@@ -1,4 +1,4 @@
-package org.jamesframework.opt4j;
+package opt4j;
 
 import org.opt4j.core.config.annotations.Info;
 import org.opt4j.core.optimizer.MaxIterations;
