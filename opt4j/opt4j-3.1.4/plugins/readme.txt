@@ -1,1 +1,0 @@
-Add plugins (jar files) here.
