@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import org.opt4j.core.genotype.BooleanGenotype;
+import org.opt4j.operators.Apply;
 import org.opt4j.operators.neighbor.Neighbor;
 
+@Apply(BooleanGenotype.class)
 public class CoreNeighbor implements Neighbor<BooleanGenotype> {
 
     private static final Random RNG = new Random();

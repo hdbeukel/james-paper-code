@@ -3,6 +3,7 @@ package org.jamesframework.opt4j;
 import org.opt4j.core.config.annotations.Info;
 import org.opt4j.core.optimizer.MaxIterations;
 import org.opt4j.core.optimizer.OptimizerModule;
+import org.opt4j.operators.neighbor.Neighbor;
 
 /**
  * Adaptation of simulated annealing module from Opt4j.
@@ -36,7 +37,7 @@ public class HillClimberModule extends OptimizerModule {
     @Override
     public void config() {
         bindIterativeOptimizer(HillClimber.class);
-        //bind(Neighbor.class).to(CoreNeighbor.class);
+        bind(Neighbor.class).to(CoreNeighbor.class);
     }
     
 }

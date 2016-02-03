@@ -35,6 +35,9 @@ public class SampleCore {
         // create search
         HillClimberModule hc = new HillClimberModule();
         hc.setIterations(steps);
+        
+        // configure operators
+        CoreNeighborModule om = new CoreNeighborModule();
                 
         // create and configure problem
         CoreCreator.n = n;
