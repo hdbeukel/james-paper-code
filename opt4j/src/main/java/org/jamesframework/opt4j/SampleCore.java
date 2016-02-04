@@ -1,6 +1,7 @@
 
-package opt4j;
+package org.jamesframework.opt4j;
 
+import org.jamesframework.james.asc.FileReader;
 import org.opt4j.core.Individual;
 import org.opt4j.core.optimizer.Archive;
 import org.opt4j.core.start.Opt4JTask;
@@ -28,7 +29,7 @@ public class SampleCore {
         int steps = Integer.parseInt(args[2]);
         
         // read distance matrix
-        double[][] dist = FileReader.read(file);
+        double[][] dist = FileReader.read(file).getDistanceMatrix();
         int n = dist.length;
                 
         // create search
@@ -45,10 +46,8 @@ public class SampleCore {
         CoreModule cm = new CoreModule();
                    
         // run search
-        ViewerModule viewer = new ViewerModule();
-        viewer.setCloseOnStop(true);
         Opt4JTask task = new Opt4JTask(false);
-        task.init(hc, cm, viewer);
+        task.init(hc, cm, om);
         try {
                         
             long startTime = System.currentTimeMillis();

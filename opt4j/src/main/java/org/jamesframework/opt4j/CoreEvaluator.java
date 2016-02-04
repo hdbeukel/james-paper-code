@@ -1,5 +1,5 @@
 
-package opt4j;
+package org.jamesframework.opt4j;
 
 import org.opt4j.core.Objective.Sign;
 import org.opt4j.core.Objectives;

@@ -1,5 +1,5 @@
 
-package opt4j;
+package org.jamesframework.opt4j;
 
 import java.util.Random;
 import java.util.Set;
