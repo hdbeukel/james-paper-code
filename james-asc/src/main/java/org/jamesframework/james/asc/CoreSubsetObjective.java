@@ -12,8 +12,11 @@ public class CoreSubsetObjective implements Objective<SubsetSolution, CoreSubset
         int n = solution.getNumSelectedIDs();
         int numDist = n * (n - 1) / 2;
         double sumDist = 0.0;
-        Integer[] sel = new Integer[n];
-        solution.getSelectedIDs().toArray(sel);
+        int[] sel = new int[n];
+        int t = 0;
+        for (int id : solution.getSelectedIDs()) {
+            sel[t++] = id;
+        }
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
                 sumDist += data.getDistance(sel[i], sel[j]);

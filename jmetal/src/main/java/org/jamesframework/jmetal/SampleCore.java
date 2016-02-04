@@ -4,6 +4,8 @@ package org.jamesframework.jmetal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import org.jamesframework.james.asc.FileReader;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.GeneticAlgorithmBuilder;
@@ -13,6 +15,7 @@ import org.uma.jmetal.operator.LocalSearchOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.operator.impl.localsearch.BasicLocalSearch;
+import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 
 public class SampleCore {
@@ -30,7 +33,7 @@ public class SampleCore {
 
     }
     
-    private static void run(String[] args){
+    private static void run(String[] args) {
         
         // parse arguments
         String file = args[0];
@@ -44,18 +47,18 @@ public class SampleCore {
         CoreSelectionProblem problem = new CoreSelectionProblem(dist, coreSize);
 
         // init operators
-        CrossoverOperator<CoreSolution> crossover = new CopyFirstParentCrossover<>();
-        MutationOperator<CoreSolution> mutation = new SubsetSwapMutation();
-        SelectionOperator<List<CoreSolution>, CoreSolution> selection = new SelectFirstParent<>();
+        CrossoverOperator<BinarySolution> crossover = new CopyFirstParentCrossover<>();
+        MutationOperator<BinarySolution> mutation = new SubsetSwapMutation();
+        SelectionOperator<List<BinarySolution>, BinarySolution> selection = new SelectFirstParent<>();
         
-        CoreSolution sol;
+        BinarySolution sol;
         long time;
         if (ga) {
             
             System.err.println("INFO: GA Emulation");
         
             // create algorithm
-            Algorithm<CoreSolution> algo = new GeneticAlgorithmBuilder<>(problem, crossover, mutation)
+            Algorithm<BinarySolution> algo = new GeneticAlgorithmBuilder<>(problem, crossover, mutation)
                     .setPopulationSize(1)
                     .setMaxEvaluations(steps)
                     .setSelectionOperator(selection)
@@ -74,7 +77,7 @@ public class SampleCore {
             System.err.println("INFO: Direct local search");
             
             // direct local search
-            LocalSearchOperator<CoreSolution> localSearch = new BasicLocalSearch<>(
+            LocalSearchOperator<BinarySolution> localSearch = new BasicLocalSearch<>(
                     steps,
                     mutation,
                     Comparator.comparing(s -> s.getObjective(0)),
@@ -91,10 +94,7 @@ public class SampleCore {
         }
         
         // output results
-        List<Integer> selectedIds = new ArrayList<>();
-        for (int i = 0; i < sol.getNumberOfVariables(); i++) {
-            selectedIds.add(sol.getVariableValue(i));
-        }
+        Set<Integer> selectedIds = sol.getVariableValue(0).stream().boxed().collect(Collectors.toSet());
         System.out.println("Best solution: " + selectedIds);
         System.out.println("Best score: " + -sol.getObjective(0));
         System.out.println("runtime (ms): " + time);

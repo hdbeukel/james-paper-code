@@ -1,19 +1,19 @@
 
 
-package org.jamesframework.jmetal;
+package org.jamesframework.jmetal.optenc;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.jamesframework.core.util.SetUtilities;
-import org.uma.jmetal.problem.impl.AbstractBinaryProblem;
-import org.uma.jmetal.solution.BinarySolution;
-import org.uma.jmetal.solution.impl.DefaultBinarySolution;
-import org.uma.jmetal.util.binarySet.BinarySet;
+import org.uma.jmetal.problem.impl.AbstractGenericProblem;
 
 
-public class CoreSelectionProblem extends AbstractBinaryProblem {
+public class CoreSelectionProblem extends AbstractGenericProblem<CoreSolution> {
 
     private static final Random RG = new Random();
     
@@ -48,15 +48,17 @@ public class CoreSelectionProblem extends AbstractBinaryProblem {
     }
 
     @Override
-    public void evaluate(BinarySolution sol) {
+    public void evaluate(CoreSolution sol) {
         
         // compute average pairwise distance
         int numDist = s * (s - 1) / 2;
         double sumDist = 0.0;
-        int[] sel = sol.getVariableValue(0).stream().toArray();
+        int id1, id2;
         for (int i = 0; i < s; i++) {
             for (int j = i + 1; j < s; j++) {
-                sumDist += dist[sel[i]][sel[j]];
+                id1 = sol.getVariableValue(i);
+                id2 = sol.getVariableValue(j);
+                sumDist += dist[id1][id2];
             }
         }
         
@@ -66,27 +68,26 @@ public class CoreSelectionProblem extends AbstractBinaryProblem {
     }
 
     @Override
-    public BinarySolution createSolution() {
+    public CoreSolution createSolution() {
         
         // random subset of IDs to select
-        Set<Integer> sel = SetUtilities.getRandomSubset(ids, s, RG);
-        // convert to binary solution
-        BinarySolution sol = new DefaultBinarySolution(this);
-        BinarySet bitset = new BinarySet(n);
-        for (int id : ids) {
-            if (sel.contains(id)) {
-                bitset.set(id);
-            }
+        List<Integer> sel = new ArrayList<>();
+        SetUtilities.getRandomSubset(ids, s, RG, sel);
+        
+        // unselected IDs
+        Set<Integer> unsel = new HashSet<>(ids);
+        unsel.removeAll(sel);
+        int[] unselA = new int[unsel.size()];
+        int i = 0;
+        for (int id : unsel) {
+            unselA[i++] = id;
         }
-        sol.setVariableValue(0, bitset);
+        
+        // create solution
+        CoreSolution sol = new CoreSolution(this, sel, unselA);
         
         return sol;
         
-    }
-
-    @Override
-    protected int getBitsPerVariable(int index) {
-        return n;
     }
         
 }

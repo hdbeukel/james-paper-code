@@ -6,19 +6,21 @@ import eva2.optimization.individuals.InterfaceDataTypeBinary;
 import eva2.optimization.operator.mutation.InterfaceMutation;
 import eva2.optimization.population.Population;
 import eva2.problems.InterfaceOptimizationProblem;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class SubsetSwapMutation implements InterfaceMutation {
 
     private static final Random RG = new Random();
-    private final int n;
+    private final Set<Integer> all;
 
     public SubsetSwapMutation(int n) {
-        this.n = n;
+        all = IntStream.range(0, n).boxed().collect(Collectors.toSet());
     }
     
     @Override
@@ -31,10 +33,16 @@ public class SubsetSwapMutation implements InterfaceMutation {
         BitSet b = bInd.getBinaryData();
         
         // swap one selected and unselected item
-        List<Integer> sel = b.stream().boxed().collect(Collectors.toList());
-        List<Integer> unsel = IntStream.range(0, n).boxed()
-                                                          .filter(i -> !sel.contains(i))
-                                                          .collect(Collectors.toList());
+        List<Integer> sel = new ArrayList<>();
+        List<Integer> unsel = new ArrayList<>();
+        for (int i = 0; i < all.size(); i++) {
+            if (b.get(i)) {
+                sel.add(i);
+            } else {
+                unsel.add(i);
+            }
+        }
+        
         int add = unsel.get(RG.nextInt(unsel.size()));
         int del = sel.get(RG.nextInt(sel.size()));
         
@@ -55,7 +63,7 @@ public class SubsetSwapMutation implements InterfaceMutation {
     
     @Override
     public Object clone() {
-        return new SubsetSwapMutation(n);
+        return new SubsetSwapMutation(all.size());
     }
 
 }
