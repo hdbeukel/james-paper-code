@@ -24,7 +24,6 @@ public class SampleCore {
      * 0: file
      * 1: size
      * 2: steps
-     * 3: GA emulation (true) or direct local search operator (false)
      */
     public static void main(String[] args) {
 
@@ -39,59 +38,29 @@ public class SampleCore {
         String file = args[0];
         int coreSize = Integer.parseInt(args[1]);
         int steps = Integer.parseInt(args[2]);
-        boolean ga = Boolean.parseBoolean(args[3]);
         
         // read distance matrix
         double[][] dist = FileReader.read(file).getDistanceMatrix();
         // create problem
         CoreSelectionProblem problem = new CoreSelectionProblem(dist, coreSize);
 
-        // init operators
-        CrossoverOperator<BinarySolution> crossover = new CopyFirstParentCrossover<>();
+        // init mutation
         MutationOperator<BinarySolution> mutation = new SubsetSwapMutation();
-        SelectionOperator<List<BinarySolution>, BinarySolution> selection = new SelectFirstParent<>();
-        
-        BinarySolution sol;
-        long time;
-        if (ga) {
-            
-            System.err.println("INFO: GA Emulation");
-        
-            // create algorithm
-            Algorithm<BinarySolution> algo = new GeneticAlgorithmBuilder<>(problem, crossover, mutation)
-                    .setPopulationSize(1)
-                    .setMaxEvaluations(steps)
-                    .setSelectionOperator(selection)
-                    .setVariant(GeneticAlgorithmVariant.STEADY_STATE)
-                    .build();
+                    
+        // create search
+        LocalSearchOperator<BinarySolution> localSearch = new BasicLocalSearch<>(
+                steps,
+                mutation,
+                Comparator.comparing(s -> s.getObjective(0)),
+                problem
+        );
 
-            // run search
-            AlgorithmRunner runner = new AlgorithmRunner.Executor(algo).execute();
-
-            // get results
-            sol = algo.getResult();
-            time = runner.getComputingTime();
+        // run algo
+        long start = System.currentTimeMillis();
+        BinarySolution sol = localSearch.execute(problem.createSolution());
+        long stop = System.currentTimeMillis();
+        long time = stop - start;
             
-        } else {
-            
-            System.err.println("INFO: Direct local search");
-            
-            // direct local search
-            LocalSearchOperator<BinarySolution> localSearch = new BasicLocalSearch<>(
-                    steps,
-                    mutation,
-                    Comparator.comparing(s -> s.getObjective(0)),
-                    problem
-            );
-            
-            // run algo
-            long start = System.currentTimeMillis();
-            sol = localSearch.execute(problem.createSolution());
-            long stop = System.currentTimeMillis();
-            
-            time = stop - start;
-            
-        }
         
         // output results
         Set<Integer> selectedIds = sol.getVariableValue(0).stream().boxed().collect(Collectors.toSet());
