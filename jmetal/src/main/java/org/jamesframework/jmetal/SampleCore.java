@@ -1,22 +1,14 @@
 
 package org.jamesframework.jmetal;
 
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import org.jamesframework.james.asc.FileReader;
-import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.GeneticAlgorithmBuilder;
-import org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.GeneticAlgorithmBuilder.GeneticAlgorithmVariant;
-import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.LocalSearchOperator;
 import org.uma.jmetal.operator.MutationOperator;
-import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.operator.impl.localsearch.BasicLocalSearch;
 import org.uma.jmetal.solution.BinarySolution;
-import org.uma.jmetal.util.AlgorithmRunner;
 
 public class SampleCore {
 
