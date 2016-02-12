@@ -28,7 +28,7 @@ public class CoreSelectionProblem extends AbstractBinaryProblem {
         this.n = dist.length;
         this.s = coreSize;
         
-        setNumberOfVariables(s);
+        setNumberOfVariables(1);
         setNumberOfObjectives(1);
         
         ids = IntStream.range(0, n).boxed().collect(Collectors.toSet());
