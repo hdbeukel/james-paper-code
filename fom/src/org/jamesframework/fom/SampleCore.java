@@ -1,8 +1,6 @@
 
 package org.jamesframework.fom;
 
-import es.us.lsi.isa.fomfw.metaheuristic.localsearch.simulatedannealing.GeometricCooler;
-import es.us.lsi.isa.fomfw.metaheuristic.localsearch.simulatedannealing.SA;
 import es.us.lsi.isa.fomfw.metaheuristic.terminator.NIterationsTerminator;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,6 +12,7 @@ public class SampleCore {
      * 0: file
      * 1: size
      * 2: steps
+     * 3: delta evaluation (boolean)
      */
     public static void main(String[] args) {
 
@@ -28,14 +27,18 @@ public class SampleCore {
         String file = args[0];
         int coreSize = Integer.parseInt(args[1]);
         int steps = Integer.parseInt(args[2]);
+        boolean delta = Boolean.parseBoolean(args[3]);
         
         // read distance matrix
         double[][] dist = FileReader.read(file).getDistanceMatrix();
         // create problem
-        CoreSelectionProblem problem = new CoreSelectionProblem(dist);
+        CoreSelectionProblem problem
+                = delta ? new CoreSelectionProblemWithDelta(dist) : new CoreSelectionProblem(dist);
 
         // create initial solution
-        CoreSubsetSolution initSol = new CoreSubsetSolution(problem, dist.length, coreSize).createRandom();
+        CoreSubsetSolution initSol
+                = delta ? new CoreSubsetSolutionWithDelta(problem, dist.length, coreSize).createRandom()
+                :         new CoreSubsetSolution(problem, dist.length, coreSize).createRandom();
                     
         // create search
         StochasticHillClimber search = new StochasticHillClimber();

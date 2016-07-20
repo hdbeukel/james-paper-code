@@ -14,7 +14,7 @@ public class CoreSelectionProblem extends UniversalProblem {
     
     @Override
     public double fitness(Solution sol) {
-        
+                
         // cast to core subset solution
         CoreSubsetSolution coreSol = (CoreSubsetSolution) sol;
         
@@ -33,6 +33,10 @@ public class CoreSelectionProblem extends UniversalProblem {
         double avgDist = sumDist/numDist;
         return -avgDist;
         
+    }
+    
+    public double getDistance(int i, int j){
+        return dist[i][j];
     }
 
 }

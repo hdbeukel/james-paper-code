@@ -4,7 +4,6 @@ package org.jamesframework.fom;
 import es.us.lsi.isa.fomfw.problem.Problem;
 import es.us.lsi.isa.fomfw.solution.AbstractSolution;
 import es.us.lsi.isa.fomfw.solution.ExplorableSolution;
-import es.us.lsi.isa.fomfw.solution.Movement;
 import es.us.lsi.isa.fomfw.util.FOMConfig;
 import java.util.ArrayList;
 import java.util.BitSet;
@@ -19,6 +18,7 @@ public class CoreSubsetSolution extends AbstractSolution implements ExplorableSo
 
     private final int size, coreSize;
     private final BitSet selected;
+    private SwapMove lastMove;
     
     public CoreSubsetSolution(Problem problem, int size, int coreSize) {
         this(problem, size, coreSize, null);
@@ -72,20 +72,24 @@ public class CoreSubsetSolution extends AbstractSolution implements ExplorableSo
         }
         
         Random rng = FOMConfig.getRandomNumberGenerator();
-        int del = sel.get(rng.nextInt(sel.size()));
         int add = unsel.get(rng.nextInt(unsel.size()));
+        int del = sel.get(rng.nextInt(sel.size()));
         
-        BitSet newSelected = (BitSet) selected.clone();
-        newSelected.flip(add);
-        newSelected.flip(del);
+        // store move
+        lastMove = new SwapMove(add, del);
+        
+        // copy solution and apply move
+        BitSet selCopy = (BitSet) selected.clone();
+        CoreSubsetSolution neighbour = new CoreSubsetSolution(problem, size, coreSize, selCopy);
+        lastMove.apply(neighbour);
                 
-        return new CoreSubsetSolution(problem, size, coreSize, newSelected);
+        return neighbour;
 
     }
     
     @Override
-    public Movement getMovement() {
-        throw new UnsupportedOperationException("Not used here.");
+    public SwapMove getMovement() {
+        return lastMove;
     }
 
     @Override
